@@ -2900,6 +2900,156 @@ textarea:focus-visible{
   }
 }
 
+
+/* ════════════════════════════════════════
+   ZONE 6 V6 — ANIMATIONS PLUS RAPIDES
+   Correction des retards d'apparition
+════════════════════════════════════════ */
+
+/* Reveal beaucoup plus rapide */
+.rv,
+.rv-l,
+.rv-r,
+.rv-s{
+  transition-duration:.32s!important;
+  transition-delay:0s!important;
+  transition-timing-function:cubic-bezier(.2,.8,.2,1)!important;
+}
+
+/* Stagger réduit presque instantané */
+.stg>.rv:nth-child(1){transition-delay:0s!important}
+.stg>.rv:nth-child(2){transition-delay:.035s!important}
+.stg>.rv:nth-child(3){transition-delay:.07s!important}
+.stg>.rv:nth-child(4){transition-delay:.105s!important}
+.stg>.rv:nth-child(5){transition-delay:.14s!important}
+.stg>.rv:nth-child(6){transition-delay:.175s!important}
+
+/* Animations d'entrée du hero accélérées */
+.hero-badge{
+  animation-duration:.38s,2.2s!important;
+  animation-delay:0s,.4s!important;
+}
+
+.hero-title{
+  animation-duration:.42s!important;
+  animation-delay:.04s!important;
+}
+
+.hero-sub{
+  animation-duration:.42s!important;
+  animation-delay:.08s!important;
+}
+
+.hero-ctas{
+  animation-duration:.42s!important;
+  animation-delay:.12s!important;
+}
+
+.hero-stats{
+  animation-duration:.45s!important;
+  animation-delay:.16s!important;
+}
+
+/* Titres mot par mot : beaucoup moins lent */
+[data-split-ready] .word{
+  animation-duration:.34s!important;
+  animation-delay:calc(var(--i) * 14ms)!important;
+}
+
+/* Transitions générales plus réactives */
+.btn-p,
+.btn-s,
+.nav-ticket-btn,
+.f-submit,
+.load-more,
+.mw,
+.wa-btn,
+.event-card,
+.stat-card,
+.news-card,
+.testi-card,
+.partner-card,
+.c-card,
+.team-card,
+.amb-card,
+.past-card,
+.faq-item,
+.prog-item,
+.ev-item,
+.ticket-opt,
+.g-inner img,
+.g-inner video,
+.team-avatar img,
+.amb-avatar img,
+.past-thumb img,
+.about-visual img,
+.event-cover img{
+  transition-duration:.18s!important;
+}
+
+/* Slideshow moins lent */
+.hero-slideshow img{
+  transition:opacity .55s ease!important;
+}
+
+/* Menu mobile plus rapide */
+.mobile-menu{
+  transition-duration:.24s!important;
+}
+
+.burger span{
+  transition-duration:.18s!important;
+}
+
+/* Modal plus immédiat */
+.modal-overlay{
+  transition-duration:.18s!important;
+}
+
+.modal{
+  transition-duration:.24s!important;
+}
+
+/* FAQ plus rapide */
+.faq-a{
+  transition:max-height .22s cubic-bezier(.2,.8,.2,1), padding .16s ease!important;
+}
+
+.faq-icon{
+  transition-duration:.16s!important;
+}
+
+/* Lightbox rapide */
+.lightbox{
+  transition-duration:.18s!important;
+}
+
+.lb-media{
+  transition-duration:.18s!important;
+}
+
+/* Micro-animations décoratives moins lentes */
+.event-strip-price,
+.stat-icon,
+.hero-badge{
+  animation-duration:2.6s!important;
+}
+
+.hero::after{
+  animation-duration:4s!important;
+}
+
+/* Si l'utilisateur veut réduire les animations, affichage direct */
+@media(prefers-reduced-motion:reduce){
+  .rv,
+  .rv-l,
+  .rv-r,
+  .rv-s{
+    opacity:1!important;
+    transform:none!important;
+  }
+}
+
 </style>
 
 <style>
@@ -3947,6 +4097,52 @@ document.querySelectorAll('img').forEach(img=>{img.addEventListener('error',func
 
   removeColorOutlines();
   window.addEventListener('load', removeColorOutlines);
+})();
+</script>
+
+
+<script>
+/* ZONE 6 V6 — apparition plus rapide */
+(function(){
+  'use strict';
+
+  /* Rend visibles rapidement les éléments reveal déjà dans l'écran */
+  const revealNow = () => {
+    const viewport = window.innerHeight || document.documentElement.clientHeight;
+    document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-s').forEach(el=>{
+      const rect = el.getBoundingClientRect();
+      if(rect.top < viewport * 1.08){
+        el.classList.add('on');
+      }
+    });
+  };
+
+  revealNow();
+  requestAnimationFrame(revealNow);
+  window.addEventListener('load', revealNow);
+  window.addEventListener('scroll', revealNow, {passive:true});
+
+  /* Accélère les observers existants en forçant les éléments proches */
+  const fastObserver = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('on');
+        fastObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin:'0px 0px 18% 0px',
+    threshold:.04
+  });
+
+  document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-s').forEach(el=>fastObserver.observe(el));
+
+  /* Compteurs : démarrage rapide si visibles */
+  const countEls = document.querySelectorAll('[data-count]');
+  countEls.forEach(el=>{
+    if(el.dataset.v6FastCount) return;
+    el.dataset.v6FastCount = '1';
+  });
 })();
 </script>
 
